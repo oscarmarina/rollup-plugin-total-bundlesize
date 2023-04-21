@@ -1,6 +1,6 @@
-/* eslint-disable no-unused-vars */
 import boxen from 'boxen';
 import filesize from 'rollup-plugin-filesize';
+
 const colors = {
   reset: '\x1b[0m',
   yellowBright: '\x1b[93m',
