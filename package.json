@@ -1,6 +1,6 @@
 {
   "name": "@blockquote/rollup-plugin-total-bundlesize",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A rollup plugin to show total bundle size",
   "keywords": [
     "vitejs",
