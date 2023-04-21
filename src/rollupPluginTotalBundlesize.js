@@ -105,6 +105,7 @@ export default (boxenOptions = {}) => {
       }${getReadableSize(totalBrotliSize)}`;
 
       console.log('\n');
+      console.log(colors.reset);
       console.log(boxen(`${colors.yellowBright}${output}${colors.reset}`, boxenOptionsDefault));
     },
   };
