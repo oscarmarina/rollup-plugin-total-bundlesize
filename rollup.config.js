@@ -1,25 +1,25 @@
-import externals from 'rollup-plugin-node-externals';
-import filesize from 'rollup-plugin-filesize';
-import { terser } from 'rollup-plugin-terser';
-import pkg from './package.json';
+import externals from "rollup-plugin-node-externals";
+import filesize from "rollup-plugin-filesize";
+import terser from "@rollup/plugin-terser";
 
 export default {
-  input: 'src/index.js',
+  input: "src/rollupPluginTotalBundlesize.js",
   onwarn(warning, rollupWarn) {
     if (!['CIRCULAR_DEPENDENCY', 'EVAL'].includes(warning.code)) {
       rollupWarn(warning);
     }
   },
-  output: {
-    dir: 'dist',
-    format: 'cjs',
-    sourcemap: true,
-    exports: 'default',
-  },
-  external: [...Object.keys(pkg.dependencies)],
-  plugins: [
-    externals(),
-    filesize({ showBrotliSize: true }),
-    terser(),
+  output: [
+    {
+      file: "dist/rollup-plugin-total-bundlesize.js",
+      format: "es",
+      sourcemap: true,
+    },
+    {
+      file: "dist/cjs/rollup-plugin-total-bundlesize.cjs",
+      format: "cjs",
+      sourcemap: true,
+    },
   ],
+  plugins: [externals(), filesize({ showBrotliSize: true }), terser()],
 };
