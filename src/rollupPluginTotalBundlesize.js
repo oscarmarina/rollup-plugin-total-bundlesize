@@ -1,3 +1,4 @@
+// @ts-nocheck
 import boxen from 'boxen';
 import filesize from 'rollup-plugin-filesize';
 

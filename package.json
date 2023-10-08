@@ -1,6 +1,6 @@
 {
   "name": "@blockquote/rollup-plugin-total-bundlesize",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "A rollup plugin to show total bundle size",
   "keywords": [
     "vitejs",
@@ -25,28 +25,28 @@
       "require": "./dist/cjs/rollup-plugin-total-bundlesize.cjs"
     }
   },
-  "main": "./dist/cjs/rollup-plugin-total-bundlesize.cjs",
+  "main": "./dist/rollup-plugin-total-bundlesize.js",
+  "module": "./dist/rollup-plugin-total-bundlesize.js",
   "source": "./src/coverageTableReporter.js",
+  "types": "./dist/rollupPluginTotalBundlesize.d.ts",
   "files": [
     "src",
     "dist"
   ],
   "scripts": {
     "prebuild": "rm -rf dist/*",
-    "build": "rollup -c",
+    "build": "rollup -c && tsc",
     "postbuild": "echo {\\\"type\\\": \\\"commonjs\\\"} > dist/cjs/package.json"
   },
   "dependencies": {
-    "boxen": "^7.0.0",
+    "boxen": "^7.1.1",
     "rollup-plugin-filesize": "^10.0.0"
   },
   "devDependencies": {
-    "rollup": "^3.20.0",
-    "rollup-plugin-node-externals": "^5.1.2",
-    "@rollup/plugin-terser": "^0.4.1"
-  },
-  "engines": {
-    "node": ">=16.0.0"
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^4.0.2",
+    "rollup-plugin-node-externals": "^6.1.2",
+    "typescript": "^5.2.2"
   },
   "publishConfig": {
     "access": "public"
