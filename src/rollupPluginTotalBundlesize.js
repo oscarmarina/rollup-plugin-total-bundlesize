@@ -29,17 +29,18 @@ export default (boxenOptions = {}) => {
    */
   const calculateByteSize = (value) => {
     let [num, unit] = value.split(' ');
+    num = parseFloat(num);
     switch (unit) {
       case 'B':
-        return parseFloat(num);
-      case 'KB':
-        return parseFloat(num) * 1e3;
-      case 'MB':
-        return parseFloat(num) * 1e6;
-      case 'GB':
-        return parseFloat(num) * 1e9;
-      default:
         return num;
+      case 'KB':
+        return num * 1e3;
+      case 'MB':
+        return num * 1e6;
+      case 'GB':
+        return num * 1e9;
+      default:
+        return num; // Return number as-is if unit is unrecognized
     }
   };
 
@@ -48,7 +49,7 @@ export default (boxenOptions = {}) => {
    * @returns {string}
    */
   const toReadableNumber = (num) => {
-    return num.toLocaleString('en', { maximumFractionDigits: 2 });
+    return num.toLocaleString('en', {maximumFractionDigits: 2});
   };
 
   /**
@@ -69,10 +70,13 @@ export default (boxenOptions = {}) => {
         result = toReadableNumber(value / 1e6) + ' MB';
         break;
       case value >= 1e9 && value < 1e12:
-        result = toReadableNumber(value / 1e6) + ' GB';
+        result = toReadableNumber(value / 1e9) + ' GB';
+        break;
+      case value >= 1e12:
+        result = toReadableNumber(value / 1e12) + ' TB';
         break;
       default:
-        result = String(value.toFixed());
+        result = toReadableNumber(value) + ' B';
     }
     return result;
   };
@@ -87,7 +91,7 @@ export default (boxenOptions = {}) => {
     generateBundle: async (...args) => {
       await filesize({
         showBrotliSize: true,
-        reporter: (options, bundle, { fileName, bundleSize, minSize, gzipSize, brotliSize }) => {
+        reporter: (options, bundle, {fileName, bundleSize, minSize, gzipSize, brotliSize}) => {
           totalBundleSize += calculateByteSize(bundleSize);
           totalMinSize += calculateByteSize(minSize);
           totalGzipSize += calculateByteSize(gzipSize);
