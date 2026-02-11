@@ -18,6 +18,6 @@
       "noImplicitOverride": true,
       "alwaysStrict": true,
       "allowSyntheticDefaultImports": true,
-      "typeRoots": [],
+      "typeRoots": ["node_modules/@types"],
   }
 }

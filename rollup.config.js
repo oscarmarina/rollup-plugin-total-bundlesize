@@ -1,9 +1,9 @@
 import externals from "rollup-plugin-node-externals";
-import filesize from "rollup-plugin-filesize";
 import terser from "@rollup/plugin-terser";
 
 export default {
   input: "src/rollupPluginTotalBundlesize.js",
+  // @ts-ignore
   onwarn(warning, rollupWarn) {
     if (!['CIRCULAR_DEPENDENCY', 'EVAL'].includes(warning.code)) {
       rollupWarn(warning);
@@ -21,5 +21,5 @@ export default {
       sourcemap: true,
     },
   ],
-  plugins: [externals(), filesize({ showBrotliSize: true }), terser()],
+  plugins: [externals(), terser()],
 };
