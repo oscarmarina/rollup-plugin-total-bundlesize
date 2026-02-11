@@ -1,6 +1,6 @@
 {
   "name": "@blockquote/rollup-plugin-total-bundlesize",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "A rollup plugin to show total bundle size",
   "keywords": [
     "vitejs",
@@ -40,13 +40,14 @@
   },
   "dependencies": {
     "boxen": "^8.0.1",
-    "rollup-plugin-filesize": "^10.0.0"
+    "terser": "^5.46.0"
   },
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
-    "rollup": "^4.28.1",
-    "rollup-plugin-node-externals": "^8.0.0",
-    "typescript": "^5.7.2"
+    "@types/node": "^25.2.3",
+    "rollup": "^4.57.1",
+    "rollup-plugin-node-externals": "^8.1.2",
+    "typescript": "^5.9.3"
   },
   "publishConfig": {
     "access": "public"

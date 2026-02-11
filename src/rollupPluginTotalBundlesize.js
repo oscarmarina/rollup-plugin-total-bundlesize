@@ -1,6 +1,6 @@
 // @ts-nocheck
 import boxen from 'boxen';
-import filesize from 'rollup-plugin-filesize';
+import calculateBundleSizes, { formatSize } from './calculateBundleSizes.js';
 
 const colors = {
   reset: '\x1b[0m',
@@ -9,8 +9,7 @@ const colors = {
   blackBright: '\x1b[90m',
   green: '\x1b[32m',
 };
-
-export default (boxenOptions = {}) => {
+export default ({showFileDetail = false, ...boxenOptions} = {}) => {
   const boxenOptionsDefault = {
     padding: {
       top: 0,
@@ -40,45 +39,8 @@ export default (boxenOptions = {}) => {
       case 'GB':
         return num * 1e9;
       default:
-        return num; // Return number as-is if unit is unrecognized
+        return num;
     }
-  };
-
-  /**
-   * @param {number} num
-   * @returns {string}
-   */
-  const toReadableNumber = (num) => {
-    return num.toLocaleString('en', {maximumFractionDigits: 2});
-  };
-
-  /**
-   * @param {number} value
-   * @returns {string}
-   */
-  const getReadableSize = (value) => {
-    let result;
-    value = parseFloat(value);
-    switch (true) {
-      case value < 1e3:
-        result = toReadableNumber(value) + ' B';
-        break;
-      case value >= 1e3 && value < 1e6:
-        result = toReadableNumber(value / 1e3) + ' KB';
-        break;
-      case value >= 1e6 && value < 1e9:
-        result = toReadableNumber(value / 1e6) + ' MB';
-        break;
-      case value >= 1e9 && value < 1e12:
-        result = toReadableNumber(value / 1e9) + ' GB';
-        break;
-      case value >= 1e12:
-        result = toReadableNumber(value / 1e12) + ' TB';
-        break;
-      default:
-        result = toReadableNumber(value) + ' B';
-    }
-    return result;
   };
 
   let totalBundleSize = 0;
@@ -86,30 +48,45 @@ export default (boxenOptions = {}) => {
   let totalGzipSize = 0;
   let totalBrotliSize = 0;
 
+  /** @type {Array<{fileName: string, bundleSize: string, minSize: string, gzipSize: string, brotliSize: string}>} */
+  const fileDetails = [];
+
   return {
     name: 'rollup-plugin-total-bundlesize',
     generateBundle: async (...args) => {
-      await filesize({
+      await calculateBundleSizes({
         showBrotliSize: true,
         reporter: (options, bundle, {fileName, bundleSize, minSize, gzipSize, brotliSize}) => {
           totalBundleSize += calculateByteSize(bundleSize);
           totalMinSize += calculateByteSize(minSize);
           totalGzipSize += calculateByteSize(gzipSize);
           totalBrotliSize += calculateByteSize(brotliSize);
+          if (showFileDetail) {
+            fileDetails.push({fileName, bundleSize, minSize, gzipSize, brotliSize});
+          }
         },
       }).generateBundle(...args);
+    },
+    closeBundle() {
+      if (showFileDetail) {
+        console.log('');
+        for (const f of fileDetails) {
+          console.log(
+            `  ${colors.green}${f.fileName}${colors.reset} → ${f.bundleSize} (min: ${f.minSize}, gz: ${f.gzipSize}, br: ${f.brotliSize})`
+          );
+        }
+      }
 
-      const output = `${colors.cyan}Bundle:${colors.reset}${colors.blackBright}${getReadableSize(
+      const output = `${colors.cyan}Bundle:${colors.reset}${colors.blackBright}${formatSize(
         totalBundleSize
       )}${colors.reset} | ${colors.cyan}Minified:${colors.reset}${
         colors.blackBright
-      }${getReadableSize(totalMinSize)}${colors.reset} | ${colors.cyan}Gzipped:${
+      }${formatSize(totalMinSize)}${colors.reset} | ${colors.cyan}Gzipped:${
         colors.blackBright
-      }${getReadableSize(totalGzipSize)}${colors.reset} | ${colors.cyan}Brotli:${colors.reset}${
+      }${formatSize(totalGzipSize)}${colors.reset} | ${colors.cyan}Brotli:${colors.reset}${
         colors.blackBright
-      }${getReadableSize(totalBrotliSize)}`;
+      }${formatSize(totalBrotliSize)}`;
 
-      console.log('\n');
       console.log(colors.reset);
       console.log(boxen(`${colors.yellowBright}${output}${colors.reset}`, boxenOptionsDefault));
     },
