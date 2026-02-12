@@ -2,7 +2,7 @@ import externals from "rollup-plugin-node-externals";
 import terser from "@rollup/plugin-terser";
 
 export default {
-  input: "src/rollupPluginTotalBundlesize.js",
+  input: "src/rollup-plugin-total-bundlesize.js",
   // @ts-ignore
   onwarn(warning, rollupWarn) {
     if (!['CIRCULAR_DEPENDENCY', 'EVAL'].includes(warning.code)) {
@@ -13,12 +13,10 @@ export default {
     {
       file: "dist/rollup-plugin-total-bundlesize.js",
       format: "es",
-      sourcemap: true,
     },
     {
       file: "dist/cjs/rollup-plugin-total-bundlesize.cjs",
       format: "cjs",
-      sourcemap: true,
     },
   ],
   plugins: [externals(), terser()],

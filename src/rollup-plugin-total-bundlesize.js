@@ -1,6 +1,5 @@
-// @ts-nocheck
 import boxen from 'boxen';
-import calculateBundleSizes, { formatSize } from './calculateBundleSizes.js';
+import calculateBundleSizes, { formatSize } from './calculate-bundle-sizes.js';
 
 const colors = {
   reset: '\x1b[0m',
@@ -9,7 +8,7 @@ const colors = {
   blackBright: '\x1b[90m',
   green: '\x1b[32m',
 };
-export default ({showFileDetail = false, ...boxenOptions} = {}) => {
+export default ({ showFileDetail = false, ...boxenOptions } = {}) => {
   const boxenOptionsDefault = {
     padding: {
       top: 0,
@@ -27,8 +26,8 @@ export default ({showFileDetail = false, ...boxenOptions} = {}) => {
    * @returns {number}
    */
   const calculateByteSize = (value) => {
-    let [num, unit] = value.split(' ');
-    num = parseFloat(num);
+    let [numStr, unit] = value.split(' ');
+    const num = parseFloat(numStr);
     switch (unit) {
       case 'B':
         return num;
@@ -53,16 +52,17 @@ export default ({showFileDetail = false, ...boxenOptions} = {}) => {
 
   return {
     name: 'rollup-plugin-total-bundlesize',
+    apply: /** @type {const} */ ('build'),
     generateBundle: async (...args) => {
       await calculateBundleSizes({
         showBrotliSize: true,
-        reporter: (options, bundle, {fileName, bundleSize, minSize, gzipSize, brotliSize}) => {
+        reporter: (options, bundle, { fileName, bundleSize, minSize, gzipSize, brotliSize }) => {
           totalBundleSize += calculateByteSize(bundleSize);
           totalMinSize += calculateByteSize(minSize);
           totalGzipSize += calculateByteSize(gzipSize);
           totalBrotliSize += calculateByteSize(brotliSize);
           if (showFileDetail) {
-            fileDetails.push({fileName, bundleSize, minSize, gzipSize, brotliSize});
+            fileDetails.push({ fileName, bundleSize, minSize, gzipSize, brotliSize });
           }
         },
       }).generateBundle(...args);
@@ -72,13 +72,13 @@ export default ({showFileDetail = false, ...boxenOptions} = {}) => {
         console.log('');
         for (const f of fileDetails) {
           console.log(
-            `  ${colors.green}${f.fileName}${colors.reset} → ${f.bundleSize} (min: ${f.minSize}, gz: ${f.gzipSize}, br: ${f.brotliSize})`
+            `  ${colors.green}${f.fileName}${colors.reset} → ${f.bundleSize} (min: ${f.minSize}, gz: ${f.gzipSize}, br: ${f.brotliSize})`,
           );
         }
       }
 
       const output = `${colors.cyan}Bundle:${colors.reset}${colors.blackBright}${formatSize(
-        totalBundleSize
+        totalBundleSize,
       )}${colors.reset} | ${colors.cyan}Minified:${colors.reset}${
         colors.blackBright
       }${formatSize(totalMinSize)}${colors.reset} | ${colors.cyan}Gzipped:${
@@ -88,6 +88,7 @@ export default ({showFileDetail = false, ...boxenOptions} = {}) => {
       }${formatSize(totalBrotliSize)}`;
 
       console.log(colors.reset);
+      // @ts-ignore
       console.log(boxen(`${colors.yellowBright}${output}${colors.reset}`, boxenOptionsDefault));
     },
   };

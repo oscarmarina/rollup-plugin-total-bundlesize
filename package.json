@@ -1,6 +1,6 @@
 {
   "name": "@blockquote/rollup-plugin-total-bundlesize",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "A rollup plugin to show total bundle size",
   "keywords": [
     "vitejs",
@@ -27,8 +27,8 @@
   },
   "main": "./dist/rollup-plugin-total-bundlesize.js",
   "module": "./dist/rollup-plugin-total-bundlesize.js",
-  "source": "./src/rollupPluginTotalBundlesize.js",
-  "types": "./dist/rollupPluginTotalBundlesize.d.ts",
+  "source": "./src/rollup-plugin-total-bundlesize.js",
+  "types": "./dist/rollup-plugin-total-bundlesize.d.ts",
   "files": [
     "src",
     "dist"
