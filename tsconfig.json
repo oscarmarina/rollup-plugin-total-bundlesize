@@ -1,23 +1,23 @@
 {
-  "include": [
-      "src/**/*.js"
-  ],
+  "include": ["src/**/*.js"],
   "compilerOptions": {
-      // https://humanwhocodes.com/snippets/2020/10/create-typescript-declarations-from-javascript-jsdoc/
-      "target": "es2022",
-      "lib": ["es2022", "DOM", "DOM.Iterable", "esnext.disposable"],
-      "module": "es2022",
-      "moduleResolution": "Bundler",
-      "declaration": true,
-      "emitDeclarationOnly": true,
-      "allowJs": true,
-      "outDir": "dist",
-      "checkJs": true,
-      "strict": false,
-      "noImplicitThis": true,
-      "noImplicitOverride": true,
-      "alwaysStrict": true,
-      "allowSyntheticDefaultImports": true,
-      "typeRoots": ["node_modules/@types"],
+    // https://humanwhocodes.com/snippets/2020/10/create-typescript-declarations-from-javascript-jsdoc/
+    "target": "es2022",
+    "lib": ["es2022", "DOM", "DOM.Iterable", "esnext.disposable"],
+    "module": "es2022",
+    "moduleResolution": "Bundler",
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "allowJs": true,
+    "rootDir": "./src",
+    "outDir": "dist",
+    "checkJs": true,
+    "strict": false,
+    "noImplicitThis": true,
+    "noImplicitOverride": true,
+    "alwaysStrict": true,
+    "allowSyntheticDefaultImports": true,
+    "typeRoots": ["node_modules/@types"],
+    "types": ["node"]
   }
 }
